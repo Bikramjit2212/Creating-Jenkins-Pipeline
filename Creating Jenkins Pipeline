@@ -1,0 +1,36 @@
+pipeline {
+    agent any //run pipeline on any available agent
+    stages {
+        stage('Check Directory') { 
+            steps {
+                cleanWs() //to clean the workspace directory
+                sh 'pwd'
+            }
+        }
+        
+        stage('Checkout Code'){
+            steps {
+                sh 'git clone https://github.com/Bikramjit2212/Shopcart-ECommerce-CICD.git' //cloning the code
+            }
+        }
+        
+        stage('List Workspace Content'){
+            steps {
+                sh 'ls -la'
+            }
+        }
+    }
+    
+    post {
+                  // execute after all stages are done
+                  // always {
+                  //     cleanWs() 
+                  // //clean workspace function that jenkins provide us to clean the workspace
+                  // }
+                  //we can also write cleanWs here like this
+        success {
+            archiveArtifacts artifacts : '**/*'
+//Cleaning artifacts in a CI/CD pipeline is essential to remove outdated builds, binaries, and temporary files, which saves storage space and reduces costs. It ensures that only the latest, valid, and secure code is deployed, prevents conflicts from residual files, and enhances overall build performance
+        }
+    }
+}
